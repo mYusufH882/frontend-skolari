@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Timer, Users, Award, Target, Calendar, Zap, BookOpen } from 'lucide-react';
+import { ArrowRight, Timer, Award, Calendar } from 'lucide-react';
 import Image from 'next/image';
 
 interface Program {
@@ -35,7 +35,7 @@ const programs: Program[] = [
       "Video tutorial"
     ],
     price: "Rp 500.000/bulan",
-    image: "/images/program-beginner.jpg",
+    image: "/images/program/program-1.jpg",
     color: "bg-emerald-500"
   },
   {
@@ -54,7 +54,7 @@ const programs: Program[] = [
       "Progress tracking"
     ],
     price: "Rp 750.000/bulan",
-    image: "/images/program-intermediate.jpg",
+    image: "/images/program/program-2.jpg",
     color: "bg-blue-500"
   },
   {
@@ -73,7 +73,7 @@ const programs: Program[] = [
       "Elite runner community"
     ],
     price: "Rp 1.000.000/bulan",
-    image: "/images/program-advanced.jpg",
+    image: "/images/program/program-3.jpg",
     color: "bg-[#EE1C25]"
   },
   {
@@ -92,7 +92,7 @@ const programs: Program[] = [
       "Mental conditioning"
     ],
     price: "Rp 1.500.000/bulan",
-    image: "/images/program-marathon.jpg",
+    image: "/images/program/program-4.jpg",
     color: "bg-purple-500"
   }
 ];

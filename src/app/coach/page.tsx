@@ -28,7 +28,7 @@ const coaches: Coach[] = [
     id: 1,
     name: "Coach Andi",
     role: "Head Coach",
-    image: "/images/coach-1.jpg",
+    image: "/images/coach/coach-1.jpg",
     specialization: ["Marathon Training", "Speed Work", "Recovery"],
     experience: "10+ tahun",
     achievements: [
@@ -44,7 +44,7 @@ const coaches: Coach[] = [
     id: 2,
     name: "Coach Sarah",
     role: "Sprint & Speed Coach",
-    image: "/images/coach-2.jpg",
+    image: "/images/coach/coach-2.jpg",
     specialization: ["Sprint Training", "Interval Training", "Strength & Conditioning"],
     experience: "8+ tahun",
     achievements: [
@@ -60,7 +60,7 @@ const coaches: Coach[] = [
     id: 3,
     name: "Coach Budi",
     role: "Endurance Coach",
-    image: "/images/coach-3.jpg",
+    image: "/images/coach/coach-3.jpg",
     specialization: ["Ultra Marathon", "Trail Running", "Endurance Building"],
     experience: "12+ tahun",
     achievements: [
@@ -76,7 +76,7 @@ const coaches: Coach[] = [
     id: 4,
     name: "Coach Diana",
     role: "Beginner Specialist",
-    image: "/images/coach-4.jpg",
+    image: "/images/coach/coach-4.jpg",
     specialization: ["Beginner Running", "Form & Technique", "Injury Prevention"],
     experience: "6+ tahun",
     achievements: [
