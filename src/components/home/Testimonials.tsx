@@ -1,14 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Testimonial {
   id: number;
   name: string;
-  position: string;
-  company: string;
+  achievement: string;
+  program: string;
   image: string;
   content: string;
   rating: number;
@@ -17,29 +17,38 @@ interface Testimonial {
 const testimonials: Testimonial[] = [
   {
     id: 1,
-    name: 'Sarah Johnson',
-    position: 'HR Director',
-    company: 'Tech Innovators Inc.',
+    name: 'Andi Pratama',
+    achievement: 'Full Marathon Finisher',
+    program: 'Marathon Training Program',
     image: '/api/placeholder/100/100',
-    content: 'Implementing this HR system has transformed our recruitment process. The efficiency gains are remarkable, and the user interface is intuitive.',
+    content: 'Berkat program latihan yang terstruktur dan dukungan coach yang luar biasa, saya berhasil menyelesaikan full marathon pertama saya dalam 4 jam 30 menit!',
     rating: 5
   },
   {
     id: 2,
-    name: 'Michael Chen',
-    position: 'Head of Talent',
-    company: 'Global Solutions Ltd',
+    name: 'Siti Rahayu',
+    achievement: 'PR 5K - 25 menit',
+    program: 'Speed Training',
     image: '/api/placeholder/100/100',
-    content: 'The automated workflows and analytics capabilities have given us unprecedented insights into our HR operations. Highly recommended!',
+    content: 'Dari yang awalnya tidak bisa lari 1 km, sekarang bisa finish 5K dalam 25 menit. Coach sangat memperhatikan teknik dan perkembangan setiap member.',
     rating: 5
   },
   {
     id: 3,
-    name: 'Emily Rodriguez',
-    position: 'HR Manager',
-    company: 'Future Enterprises',
+    name: 'Budi Santoso',
+    achievement: 'Half Marathon Winner',
+    program: 'Elite Runner Program',
     image: '/api/placeholder/100/100',
-    content: 'From onboarding to performance management, this platform has streamlined all our HR processes. The support team is also excellent.',
+    content: 'Program ini tidak hanya tentang lari, tapi juga nutrisi dan recovery. Komunitas yang supportif membuat setiap latihan menjadi menyenangkan.',
+    rating: 5
+  },
+  {
+    id: 4,
+    name: 'Maya Wijaya',
+    achievement: '10K Personal Best',
+    program: 'Intermediate Program',
+    image: '/api/placeholder/100/100',
+    content: 'Jadwal latihan yang fleksibel sangat membantu saya yang sibuk kerja. Coach selalu memberikan alternatif latihan yang bisa disesuaikan.',
     rating: 5
   }
 ];
@@ -62,17 +71,17 @@ const TestimonialCard: React.FC<{ testimonial: Testimonial }> = ({ testimonial }
           <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
             {testimonial.name}
           </h4>
-          <p className="text-sm text-gray-600 dark:text-gray-300">
-            {testimonial.position}
+          <p className="text-sm text-red-500 font-medium">
+            {testimonial.achievement}
           </p>
-          <p className="text-sm text-primary-500">
-            {testimonial.company}
+          <p className="text-sm text-gray-600 dark:text-gray-300">
+            {testimonial.program}
           </p>
         </div>
       </div>
       <div className="flex gap-1 mb-4">
         {Array.from({ length: testimonial.rating }).map((_, i) => (
-          <Star key={i} className="w-5 h-5 fill-primary-500 text-primary-500" />
+          <Star key={i} className="w-5 h-5 fill-red-500 text-red-500" />
         ))}
       </div>
       <p className="text-gray-600 dark:text-gray-300 italic">
@@ -129,7 +138,7 @@ const Testimonials: React.FC = () => {
             viewport={{ once: true }}
             className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4"
           >
-            What Our Clients Say
+            Testimoni Member
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -138,7 +147,7 @@ const Testimonials: React.FC = () => {
             viewport={{ once: true }}
             className="text-lg text-gray-600 dark:text-gray-300"
           >
-            Discover why companies choose our HR management solution
+            Kisah sukses para runner yang telah berlatih bersama kami
           </motion.p>
         </div>
 
@@ -172,7 +181,6 @@ const Testimonials: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* Navigation buttons */}
           <div className="flex justify-center gap-4 mt-8">
             <button
               onClick={() => paginate(-1)}
@@ -188,7 +196,6 @@ const Testimonials: React.FC = () => {
             </button>
           </div>
 
-          {/* Dots indicator */}
           <div className="flex justify-center gap-2 mt-4">
             {testimonials.map((_, index) => (
               <button
@@ -199,7 +206,7 @@ const Testimonials: React.FC = () => {
                 }}
                 className={`w-2 h-2 rounded-full transition-colors ${
                   index === currentIndex
-                    ? 'bg-primary-500'
+                    ? 'bg-red-500'
                     : 'bg-gray-300 dark:bg-gray-600'
                 }`}
               />

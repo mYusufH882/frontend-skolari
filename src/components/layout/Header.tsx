@@ -5,6 +5,7 @@ import { Menu, X, Sun, Moon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
+import Image from 'next/image';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,15 +25,15 @@ const Header = () => {
 
   const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Products', href: '/products' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Careers', href: '/careers' },
-    { name: 'Contact', href: '/contact' },
+    { name: 'Program', href: '/program' },
+    { name: 'Jadwal', href: '/jadwal' },
+    { name: 'Coach', href: '/coach' },
+    { name: 'Membership', href: '/membership' },
+    { name: 'Kontak', href: '/kontak' },
   ];
 
   const headerClass = `fixed w-full z-30 transition-all duration-300 ${
-    scrolled ? 'bg-white dark:bg-gray-900 shadow-lg' : 'bg-white dark:bg-gray-900'
+    scrolled ? 'bg-white dark:bg-gray-900 shadow-lg' : 'bg-white/80 backdrop-blur-sm dark:bg-gray-900/80'
   }`;
 
   return (
@@ -40,22 +41,24 @@ const Header = () => {
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="flex-shrink-0">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center space-x-2"
-              >
-                <svg 
-                  viewBox="0 0 1024 1024" 
-                  className="w-10 h-10 text-primary-500"
-                  fill="currentColor"
-                >
-                  <path d="M866.9 469.8L527.1 160.1c-8.4-8.4-22.1-8.4-30.5 0L157.1 469.8c-8.4 8.4-8.4 22.1 0 30.5l339.8 309.7c8.4 8.4 22.1 8.4 30.5 0l339.8-309.7c8.4-8.4 8.4-22.1 0-30.5zM512 892.5L172.2 582.8 512 273.1l339.8 309.7L512 892.5z"/>
-                </svg>
-                <span className="text-2xl font-bold text-gray-900 dark:text-white hidden sm:block">HRSystem</span>
-              </motion.div>
-            </Link>
+          <Link href="/" className="flex-shrink-0">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center space-x-2"
+          >
+            <Image 
+              src="/images/skolari-logo.png" // atau .png
+              alt="Skolari Logo"
+              width={40}
+              height={40}
+              className="w-auto h-8"
+            />
+            <span className="text-2xl font-bold text-gray-900 dark:text-white hidden sm:block">
+              SKOLARI
+            </span>
+          </motion.div>
+        </Link>
           </div>
 
           <div className="hidden md:block">
@@ -64,7 +67,7 @@ const Header = () => {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
+                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-[#EE1C25] dark:text-gray-300 dark:hover:text-[#EE1C25] transition-colors"
                 >
                   {item.name}
                 </Link>
@@ -72,7 +75,7 @@ const Header = () => {
               {mounted && (
                 <button
                   onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                  className="p-2 rounded-md text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
+                  className="p-2 rounded-md text-gray-700 hover:text-[#EE1C25] dark:text-gray-300 dark:hover:text-[#EE1C25] transition-colors"
                 >
                   {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
                 </button>
@@ -83,7 +86,7 @@ const Header = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-md text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              className="p-2 rounded-md text-gray-700 hover:text-[#EE1C25] dark:text-gray-300 dark:hover:text-[#EE1C25]"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -105,12 +108,23 @@ const Header = () => {
               <Link
                 key={item.name}
                 href={item.href}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#EE1C25] dark:text-gray-300 dark:hover:text-[#EE1C25]"
                 onClick={() => setIsOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
+            {mounted && (
+              <button
+                onClick={() => {
+                  setTheme(theme === 'dark' ? 'light' : 'dark');
+                  setIsOpen(false);
+                }}
+                className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#EE1C25] dark:text-gray-300 dark:hover:text-[#EE1C25]"
+              >
+                {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+              </button>
+            )}
           </div>
         </motion.div>
       </nav>

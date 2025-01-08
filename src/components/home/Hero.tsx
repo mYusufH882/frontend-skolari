@@ -1,109 +1,218 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
+
+interface Slide {
+  id: number;
+  title: string;
+  subtitle: string;
+  description: string;
+  image: string;
+  cta: {
+    primary: string;
+    secondary: string;
+  };
+}
+
+const slides: Slide[] = [
+  {
+    id: 1,
+    title: "Tingkatkan",
+    subtitle: "Performa Lari Anda",
+    description: "Program latihan terstruktur dengan coach profesional untuk semua level pelari",
+    image: "/images/hero-1.jpg",
+    cta: {
+      primary: "Mulai Berlatih",
+      secondary: "Pelajari Lebih Lanjut"
+    }
+  },
+  {
+    id: 2,
+    title: "Persiapan",
+    subtitle: "Event & Marathon",
+    description: "Program khusus untuk persiapan lomba lari dengan strategi yang teruji",
+    image: "/images/hero-2.jpg",
+    cta: {
+      primary: "Daftar Sekarang",
+      secondary: "Lihat Program"
+    }
+  },
+  {
+    id: 3,
+    title: "Bergabung",
+    subtitle: "Dengan Komunitas Kami",
+    description: "Dapatkan dukungan dan motivasi dari komunitas pelari yang bersemangat",
+    image: "/images/hero-3.jpg",
+    cta: {
+      primary: "Gabung Sekarang",
+      secondary: "Lihat Komunitas"
+    }
+  }
+];
 
 const Hero = () => {
-  const features = [
-    'Digital Recruitment System',
-    'Modern HRIS Solution',
-    'Employee Management',
-    'Performance Analytics'
-  ];
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  // Auto slide
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDirection(1);
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0
+    })
+  };
+
+  const swipeConfidenceThreshold = 10000;
+  const swipePower = (offset: number, velocity: number) => {
+    return Math.abs(offset) * velocity;
+  };
+
+  const paginate = (newDirection: number) => {
+    setDirection(newDirection);
+    setCurrentSlide((prev) => {
+      let next = prev + newDirection;
+      if (next < 0) next = slides.length - 1;
+      if (next >= slides.length) next = 0;
+      return next;
+    });
+  };
 
   return (
-    <div className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-primary-200 dark:bg-primary-800/50 blur-3xl opacity-30 animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-primary-300 dark:bg-primary-700/50 blur-3xl opacity-30 animate-pulse" />
-      </div>
+    <div className="relative h-screen overflow-hidden bg-gray-900">
+      {/* Background Slides */}
+      <AnimatePresence initial={false} custom={direction}>
+        <motion.div
+          key={currentSlide}
+          custom={direction}
+          variants={slideVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { type: "spring", stiffness: 300, damping: 30 },
+            opacity: { duration: 0.2 }
+          }}
+          className="absolute inset-0"
+        >
+          {/* Image Background */}
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left column - Text content */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-8"
-          >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white">
-              Transform Your{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-primary-600">
-                HR Management
-              </span>
-            </h1>
-            
-            <p className="text-xl text-gray-600 dark:text-gray-300">
-              Streamline your recruitment process and HR operations with our comprehensive digital solution.
-            </p>
+          <div className="relative w-full h-full">
+          <Image
+            src={slides[currentSlide].image}
+            alt={`Slide ${currentSlide + 1}`}
+            fill
+            className="object-cover object-right" // Ubah ke object-right untuk posisi gambar di kanan
+            priority
+          />
+          {/* Dark overlay dengan gradient */}
+          <div className="absolute inset-0 bg-[#1a1f2e]/80" /> {/* Background lebih gelap */}
+          {/* Gradient dari kiri ke kanan untuk memisahkan teks */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1a1f2e] via-[#1a1f2e]/90 to-transparent" />
+        </div>
+        </motion.div>
+      </AnimatePresence>
 
-            <div className="space-y-4">
-              {features.map((feature, index) => (
+      {/* Content */}
+
+      <div className="relative h-full">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full">
+            <div className="flex items-center h-full">
+              <AnimatePresence mode="wait">
                 <motion.div
-                  key={feature}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.2 }}
-                  className="flex items-center space-x-3"
+                  key={currentSlide}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                  className="max-w-xl pl-0 lg:pl-4" // Tambah padding left pada desktop
                 >
-                  <CheckCircle className="w-5 h-5 text-primary-500" />
-                  <span className="text-gray-700 dark:text-gray-300">{feature}</span>
+                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold">
+                    <span className="text-white">{slides[currentSlide].title}</span>
+                    <div className="text-[#EE1C25] mt-2"> {/* Tambah margin top */}
+                      {slides[currentSlide].subtitle}
+                    </div>
+                  </h1>
+                  <p className="text-xl text-gray-300 mt-6 mb-8">
+                    {slides[currentSlide].description}
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-8 py-3 rounded-lg bg-[#EE1C25] text-white font-medium flex items-center justify-center space-x-2"
+                    >
+                      <span>{slides[currentSlide].cta.primary}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-8 py-3 rounded-lg border border-white text-white font-medium hover:bg-white/10 transition-colors"
+                    >
+                      {slides[currentSlide].cta.secondary}
+                    </motion.button>
+                  </div>
                 </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+
+      {/* Navigation */}
+      <div className="absolute bottom-8 left-0 right-0">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center">
+            <div className="flex space-x-4">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setDirection(index > currentSlide ? 1 : -1);
+                    setCurrentSlide(index);
+                  }}
+                  className={`w-3 h-3 rounded-full transition-all ${
+                    index === currentSlide ? 'bg-[#EE1C25] w-6' : 'bg-white/50 hover:bg-white'
+                  }`}
+                />
               ))}
             </div>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-medium flex items-center justify-center space-x-2 hover:shadow-lg transition-all"
+            <div className="flex space-x-2">
+              <button
+                onClick={() => paginate(-1)}
+                className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
               >
-                <span>Get Started</span>
-                <ArrowRight className="w-4 h-4" />
-              </motion.button>
-              
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 rounded-lg border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button
+                onClick={() => paginate(1)}
+                className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
               >
-                Learn More
-              </motion.button>
+                <ChevronRight className="w-6 h-6" />
+              </button>
             </div>
-          </motion.div>
-
-          {/* Right column - Floating illustration */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
-            <div className="relative w-full aspect-square">
-              {/* Abstract shapes */}
-              <div className="absolute inset-0">
-                <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-primary-100 dark:bg-primary-800 rounded-lg rotate-12 animate-float" />
-                <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-primary-200 dark:bg-primary-700 rounded-full animate-float-delayed" />
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-gradient-to-br from-primary-400 to-primary-500 dark:from-primary-600 dark:to-primary-700 rounded-xl rotate-45 animate-pulse" />
-              </div>
-              
-              {/* Dashboard mockup */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-4/5 h-4/5 bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-4">
-                  <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full mb-4" />
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="h-20 bg-primary-50 dark:bg-primary-900/30 rounded-lg" />
-                    <div className="h-20 bg-primary-50 dark:bg-primary-900/30 rounded-lg" />
-                    <div className="h-20 bg-primary-50 dark:bg-primary-900/30 rounded-lg" />
-                    <div className="h-20 bg-primary-50 dark:bg-primary-900/30 rounded-lg" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

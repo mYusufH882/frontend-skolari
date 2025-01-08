@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 
@@ -11,24 +11,28 @@ interface FAQItem {
 
 const faqs: FAQItem[] = [
   {
-    question: 'How quickly can we implement the HR system?',
-    answer: 'Our implementation process typically takes 2-4 weeks, depending on your organizations size and specific requirements. We provide dedicated support throughout the implementation to ensure a smooth transition.'
+    question: 'Apakah saya harus memiliki pengalaman lari sebelumnya?',
+    answer: 'Tidak, kami menerima semua level pelari dari pemula hingga yang berpengalaman. Program kami disesuaikan dengan kemampuan dan target masing-masing peserta. Untuk pemula, kami memiliki program khusus yang akan membantu Anda memulai dengan aman dan nyaman.'
   },
   {
-    question: 'Is the system customizable to our specific needs?',
-    answer: 'Yes, our HR system is highly customizable. You can configure workflows, forms, approval processes, and reports to match your organizations specific requirements and processes.'
+    question: 'Bagaimana sistem latihan yang diterapkan?',
+    answer: 'Kami menerapkan sistem latihan yang terstruktur dengan pertemuan 3-4 kali seminggu. Setiap sesi terdiri dari warm-up, latihan inti, dan cooling down. Program latihan disesuaikan dengan level dan target Anda, didampingi oleh coach profesional yang akan memantau perkembangan Anda.'
   },
   {
-    question: 'What kind of support do you provide?',
-    answer: 'We offer 24/7 technical support, regular training sessions, and dedicated account managers. Our support team is available via email, phone, and live chat to assist you with any questions or issues.'
+    question: 'Berapa biaya untuk bergabung dengan program ini?',
+    answer: 'Kami memiliki beberapa paket membership yang bisa dipilih, mulai dari Rp 500.000/bulan untuk Basic Member hingga Rp 1.500.000/bulan untuk Premium Member. Setiap paket memiliki fasilitas berbeda termasuk jumlah sesi latihan, konsultasi pribadi dengan coach, dan akses ke komunitas.'
   },
   {
-    question: 'How secure is the data in your system?',
-    answer: 'We implement enterprise-grade security measures including encryption, regular backups, and compliance with international data protection standards. Your data is stored in secure, ISO-certified data centers.'
+    question: 'Apakah ada program khusus untuk persiapan lomba?',
+    answer: 'Ya, kami memiliki program khusus untuk persiapan berbagai jenis lomba lari (5K, 10K, Half Marathon, Full Marathon). Program ini mencakup training plan spesifik, strategi race, nutrisi, dan simulasi lomba untuk memastikan Anda siap menghadapi event yang ditargetkan.'
   },
   {
-    question: 'Can the system integrate with our existing software?',
-    answer: 'Yes, our system offers API integration capabilities with many popular business software including payroll systems, time tracking tools, and other HR-related applications.'
+    question: 'Dimana lokasi latihan dilaksanakan?',
+    answer: 'Latihan dilaksanakan di beberapa lokasi strategis di kota ini, termasuk GBK Senayan, Gelora Bung Karno, dan beberapa taman kota. Untuk program Premium, kami juga menyediakan opsi latihan di lokasi yang diinginkan member.'
+  },
+  {
+    question: 'Bagaimana jika saya berhalangan hadir saat latihan?',
+    answer: 'Kami memahami kesibukan member, karena itu kami menyediakan fleksibilitas untuk mengganti jadwal latihan yang terlewat di hari lain dalam minggu yang sama. Anda juga akan mendapatkan program latihan mandiri yang bisa dilakukan di waktu luang.'
   }
 ];
 
@@ -48,9 +52,9 @@ const FAQItem: React.FC<{ item: FAQItem; isOpen: boolean; onToggle: () => void }
         </span>
         <span className="ml-6 flex-shrink-0">
           {isOpen ? (
-            <Minus className="w-6 h-6 text-primary-500" />
+            <Minus className="w-6 h-6 text-[#EE1C25]" />
           ) : (
-            <Plus className="w-6 h-6 text-primary-500" />
+            <Plus className="w-6 h-6 text-[#EE1C25]" />
           )}
         </span>
       </button>
@@ -84,19 +88,20 @@ const FAQ: React.FC = () => {
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
               viewport={{ once: true }}
               className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4"
             >
-              Frequently Asked Questions
+              Pertanyaan yang Sering Diajukan
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
               className="text-lg text-gray-600 dark:text-gray-300"
             >
-              Everything you need to know about our HR management system
+              Temukan jawaban untuk pertanyaan umum seputar program latihan lari kami
             </motion.p>
           </div>
 
