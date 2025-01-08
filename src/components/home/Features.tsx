@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from 'next-themes';
 
 const benefits = [
   {
@@ -54,7 +53,6 @@ const GymBenefits = () => {
   const [selectedBenefit, setSelectedBenefit] = useState(benefits[0]);
   const [isAnimating, setIsAnimating] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
 
   // Wait for mount to avoid hydration mismatch
   useEffect(() => {
@@ -65,7 +63,7 @@ const GymBenefits = () => {
     return null;
   }
 
-  const handleBenefitClick = (benefit) => {
+  const handleBenefitClick = (benefit: any) => {
     if (!isAnimating && benefit.id !== selectedBenefit.id) {
       setIsAnimating(true);
       setSelectedBenefit(benefit);

@@ -20,7 +20,7 @@ const testimonials: Testimonial[] = [
     name: 'Andi Pratama',
     achievement: 'Full Marathon Finisher',
     program: 'Marathon Training Program',
-    image: '/api/placeholder/100/100',
+    image: "/images/testimonial/testi-1.jpg",
     content: 'Berkat program latihan yang terstruktur dan dukungan coach yang luar biasa, saya berhasil menyelesaikan full marathon pertama saya dalam 4 jam 30 menit!',
     rating: 5
   },
@@ -29,7 +29,7 @@ const testimonials: Testimonial[] = [
     name: 'Siti Rahayu',
     achievement: 'PR 5K - 25 menit',
     program: 'Speed Training',
-    image: '/api/placeholder/100/100',
+    image: "/images/testimonial/testi-3.jpg",
     content: 'Dari yang awalnya tidak bisa lari 1 km, sekarang bisa finish 5K dalam 25 menit. Coach sangat memperhatikan teknik dan perkembangan setiap member.',
     rating: 5
   },
@@ -38,7 +38,7 @@ const testimonials: Testimonial[] = [
     name: 'Budi Santoso',
     achievement: 'Half Marathon Winner',
     program: 'Elite Runner Program',
-    image: '/api/placeholder/100/100',
+    image: "/images/testimonial/testi-2.jpg",
     content: 'Program ini tidak hanya tentang lari, tapi juga nutrisi dan recovery. Komunitas yang supportif membuat setiap latihan menjadi menyenangkan.',
     rating: 5
   },
@@ -47,7 +47,7 @@ const testimonials: Testimonial[] = [
     name: 'Maya Wijaya',
     achievement: '10K Personal Best',
     program: 'Intermediate Program',
-    image: '/api/placeholder/100/100',
+    image: "/images/testimonial/testi-4.jpg",
     content: 'Jadwal latihan yang fleksibel sangat membantu saya yang sibuk kerja. Coach selalu memberikan alternatif latihan yang bisa disesuaikan.',
     rating: 5
   }

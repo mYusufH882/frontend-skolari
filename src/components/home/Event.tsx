@@ -21,7 +21,7 @@ const upcomingEvents: Event[] = [
     date: "20 April 2025",
     time: "05:00 WIB",
     location: "Jakarta",
-    image: "/images/coach.jpg",
+    image: "/images/home/home-1.jpg",
     category: "Marathon"
   },
   {
@@ -30,7 +30,7 @@ const upcomingEvents: Event[] = [
     date: "15 Mei 2025",
     time: "06:00 WIB",
     location: "Magelang",
-    image: "/images/coach.jpg",
+    image: "/images/home/home-2.jpg",
     category: "10K"
   },
   {
@@ -39,7 +39,7 @@ const upcomingEvents: Event[] = [
     date: "1 Juni 2025",
     time: "05:30 WIB",
     location: "Bali",
-    image: "/images/coach.jpg",
+    image: "/images/home/home-3.jpg",
     category: "Half Marathon"
   }
 ];
