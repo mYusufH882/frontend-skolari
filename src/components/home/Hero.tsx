@@ -57,7 +57,6 @@ const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [direction, setDirection] = useState(0);
 
-  // Auto slide
   useEffect(() => {
     const timer = setInterval(() => {
       setDirection(1);
@@ -68,25 +67,18 @@ const Hero = () => {
   }, []);
 
   const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 1000 : -1000,
-      opacity: 0
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1
+    enter: {
+      opacity: 0,
+      scale: 1.1,
     },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
-      opacity: 0
-    })
-  };
-
-  const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity;
+    center: {
+      opacity: 1,
+      scale: 1,
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.9,
+    }
   };
 
   const paginate = (newDirection: number) => {
@@ -100,88 +92,82 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative h-screen overflow-hidden bg-gray-900">
-      {/* Background Slides */}
-      <AnimatePresence initial={false} custom={direction}>
-        <motion.div
-          key={currentSlide}
-          custom={direction}
-          variants={slideVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{
-            x: { type: "spring", stiffness: 300, damping: 30 },
-            opacity: { duration: 0.2 }
-          }}
-          className="absolute inset-0"
-        >
-          {/* Image Background */}
+    <div className="relative h-screen overflow-hidden">
+      {/* Background Slides Layer */}
+      <div className="absolute inset-0 z-0">
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={currentSlide}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              opacity: { duration: 0.8 },
+              scale: { duration: 1 }
+            }}
+            className="relative w-full h-full"
+          >
+            <Image
+              src={slides[currentSlide].image}
+              alt={`Slide ${currentSlide + 1}`}
+              fill
+              className="object-cover"
+              priority
+            />
+            {/* Overlay for better text readability */}
+            <div className="absolute inset-0 bg-black/40" />
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
-          <div className="relative w-full h-full">
-          <Image
-            src={slides[currentSlide].image}
-            alt={`Slide ${currentSlide + 1}`}
-            fill
-            className="object-cover object-right" // Ubah ke object-right untuk posisi gambar di kanan
-            priority
-          />
-          {/* Dark overlay dengan gradient */}
-          <div className="absolute inset-0 bg-[#1a1f2e]/80" /> {/* Background lebih gelap */}
-          {/* Gradient dari kiri ke kanan untuk memisahkan teks */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1a1f2e] via-[#1a1f2e]/90 to-transparent" />
-        </div>
-        </motion.div>
-      </AnimatePresence>
-
-      {/* Content */}
-
-      <div className="relative h-full">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full">
-            <div className="flex items-center h-full">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentSlide}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5 }}
-                  className="max-w-xl pl-0 lg:pl-4" // Tambah padding left pada desktop
-                >
-                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold">
-                    <span className="text-white">{slides[currentSlide].title}</span>
-                    <div className="text-[#EE1C25] mt-2"> {/* Tambah margin top */}
-                      {slides[currentSlide].subtitle}
-                    </div>
-                  </h1>
-                  <p className="text-xl text-gray-300 mt-6 mb-8">
-                    {slides[currentSlide].description}
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-8 py-3 rounded-lg bg-[#EE1C25] text-white font-medium flex items-center justify-center space-x-2"
-                    >
-                      <span>{slides[currentSlide].cta.primary}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-8 py-3 rounded-lg border border-white text-white font-medium hover:bg-white/10 transition-colors"
-                    >
-                      {slides[currentSlide].cta.secondary}
-                    </motion.button>
+      {/* Content Layer */}
+      <div className="relative z-10 h-full">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full">
+          <div className="flex items-center h-full">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSlide}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="max-w-xl"
+              >
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
+                  <span className="text-white drop-shadow-lg">{slides[currentSlide].title}</span>
+                  <div className="text-[#EE1C25] mt-2 drop-shadow-lg">
+                    {slides[currentSlide].subtitle}
                   </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
+                </h1>
+                <p className="text-xl text-white mt-6 mb-8 leading-relaxed drop-shadow">
+                  {slides[currentSlide].description}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-8 py-3 rounded-lg bg-[#EE1C25] text-white font-medium flex items-center justify-center space-x-2 hover:bg-[#ff2c36] transition-colors shadow-lg"
+                  >
+                    <span>{slides[currentSlide].cta.primary}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-8 py-3 rounded-lg border-2 border-white text-white font-medium hover:bg-white/10 transition-colors shadow-lg backdrop-blur-sm"
+                  >
+                    {slides[currentSlide].cta.secondary}
+                  </motion.button>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
+      </div>
 
-      {/* Navigation */}
-      <div className="absolute bottom-8 left-0 right-0">
+      {/* Navigation Layer */}
+      <div className="absolute bottom-8 left-0 right-0 z-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div className="flex space-x-4">
@@ -201,13 +187,13 @@ const Hero = () => {
             <div className="flex space-x-2">
               <button
                 onClick={() => paginate(-1)}
-                className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-sm"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
                 onClick={() => paginate(1)}
-                className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-sm"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>

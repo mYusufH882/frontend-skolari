@@ -1,129 +1,155 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Users, 
-  Timer, 
-  Trophy,
-  Calendar, 
-  Heart,
-  Target,
-  LucideIcon 
-} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from 'next-themes';
 
-interface Feature {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-  color: string;
-}
-
-interface FeatureCardProps {
-  feature: Feature;
-  index: number;
-}
-
-const features: Feature[] = [
+const benefits = [
   {
-    icon: Timer,
-    title: 'Program Terstruktur',
-    description: 'Program latihan yang disesuaikan dengan level dan target Anda, dari pemula hingga atlet.',
-    color: 'bg-red-50 dark:bg-red-900/20'
+    id: 1,
+    title: "Bebas Akses ke Semua Club Skolari",
+    description: "Nikmati kebebasan berolahraga di seluruh club Skolari di Indonesia. Akses tidak terbatas ke semua fasilitas dan kelas.",
+    image: "/images/gym-1.jpg",
+    highlight: true
   },
   {
-    icon: Users,
-    title: 'Coach Profesional',
-    description: 'Tim pelatih berpengalaman dan bersertifikasi yang akan membimbing Anda mencapai tujuan.',
-    color: 'bg-rose-50 dark:bg-rose-900/20'
+    id: 2,
+    title: "Lebih dari 4000+ Kelas Per Bulan",
+    description: "Pilihan kelas yang beragam dengan jadwal fleksibel. Dari yoga hingga HIIT, temukan kelas yang sesuai dengan gaya hidupmu.",
+    image: "/images/gym-2.jpg",
+    highlight: false
   },
   {
-    icon: Trophy,
-    title: 'Race Preparation',
-    description: 'Persiapan khusus untuk menghadapi berbagai jenis perlombaan lari dengan strategi yang tepat.',
-    color: 'bg-red-50 dark:bg-red-900/20'
+    id: 3,
+    title: "Fasilitas Terlengkap",
+    description: "Peralatan gym modern, area kardio, studio kelas, kolam renang, dan berbagai fasilitas premium lainnya untuk mendukung latihan Anda.",
+    image: "/images/gym-3.png",
+    highlight: false
   },
   {
-    icon: Calendar,
-    title: 'Jadwal Fleksibel',
-    description: 'Pilih jadwal latihan yang sesuai dengan kesibukan Anda, tersedia berbagai sesi setiap hari.',
-    color: 'bg-rose-50 dark:bg-rose-900/20'
+    id: 4,
+    title: "Akses 24 Jam Setiap Hari",
+    description: "Latihan kapanpun Anda mau. Club Skolari buka 24 jam setiap hari untuk mengakomodasi jadwal sibuk Anda.",
+    image: "/images/gym-4.jpg",
+    highlight: false
   },
   {
-    icon: Heart,
-    title: 'Komunitas Supportif',
-    description: 'Bergabung dengan komunitas pelari yang saling mendukung dan memotivasi dalam mencapai goals.',
-    color: 'bg-red-50 dark:bg-red-900/20'
+    id: 5,
+    title: "Kelas Grup Pilates+ Terbesar & Terlengkap di Indonesia",
+    description: "Program Pilates+ eksklusif dengan instruktur bersertifikasi dan peralatan premium untuk hasil maksimal.",
+    image: "/images/gym-5.png",
+    highlight: false
   },
   {
-    icon: Target,
-    title: 'Performance Tracking',
-    description: 'Pantau dan analisa perkembangan performa lari Anda dengan teknologi tracking modern.',
-    color: 'bg-rose-50 dark:bg-rose-900/20'
+    id: 6,
+    title: "Tersedia Peminjaman Handuk Gratis",
+    description: "Handuk bersih tersedia gratis setiap kali Anda berlatih. Fokus pada latihan tanpa perlu repot membawa handuk.",
+    image: "/images/gym-6.jpg",
+    highlight: false
   }
 ];
 
-const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
-  const Icon = feature.icon;
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      viewport={{ once: true }}
-      className="relative p-6 rounded-2xl group hover:scale-105 transition-transform duration-300"
-    >
-      <div className={`absolute inset-0 rounded-2xl ${feature.color}`} />
-      <div className="relative space-y-4">
-        <div className="w-12 h-12 rounded-lg bg-red-500 flex items-center justify-center">
-          <Icon className="w-6 h-6 text-white" />
-        </div>
-        
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-          {feature.title}
-        </h3>
-        
-        <p className="text-gray-600 dark:text-gray-300">
-          {feature.description}
-        </p>
-      </div>
-    </motion.div>
-  );
-};
+const GymBenefits = () => {
+  const [selectedBenefit, setSelectedBenefit] = useState(benefits[0]);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
 
-const Features: React.FC = () => {
+  // Wait for mount to avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  const handleBenefitClick = (benefit) => {
+    if (!isAnimating && benefit.id !== selectedBenefit.id) {
+      setIsAnimating(true);
+      setSelectedBenefit(benefit);
+    }
+  };
+
   return (
-    <section className="py-20 bg-gray-50 dark:bg-gray-800/50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center space-y-4 mb-16">
+    <section className="bg-white dark:bg-[#111111] min-h-screen py-20 transition-colors duration-300">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16">
           <motion.h2 
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white"
+            transition={{ duration: 0.6 }}
+            className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4"
           >
-            Program Unggulan Kami
+            Berbagai Keuntungan Lari di Skolari
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: -20 }}
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="max-w-2xl mx-auto text-gray-600 dark:text-gray-300"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg text-gray-600 dark:text-gray-400"
           >
-            Kembangkan potensi lari Anda dengan program komprehensif yang didukung oleh tim profesional
+            Alasan Kenapa Kamu Harus Lari di Skolari
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <FeatureCard key={feature.title} feature={feature} index={index} />
-          ))}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <div className="space-y-4">
+            {benefits.map((benefit, index) => (
+              <motion.div
+                key={benefit.id}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                onClick={() => handleBenefitClick(benefit)}
+                className={`p-4 rounded-lg border ${
+                  benefit.id === selectedBenefit.id 
+                    ? 'border-blue-500 bg-blue-600 text-white' 
+                    : 'border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
+                } 
+                transition-all duration-300 cursor-pointer`}
+              >
+                <p className="text-lg font-medium">{benefit.title}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="relative">
+            <AnimatePresence mode="wait" onExitComplete={() => setIsAnimating(false)}>
+              <motion.div
+                key={selectedBenefit.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="space-y-6"
+              >
+                <div className="relative h-[400px] rounded-2xl overflow-hidden">
+                  <Image
+                    src={selectedBenefit.image}
+                    alt={selectedBenefit.title}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {selectedBenefit.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    {selectedBenefit.description}
+                  </p>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </section>
   );
 };
 
-export default Features;
+export default GymBenefits;
