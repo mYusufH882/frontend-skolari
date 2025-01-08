@@ -28,6 +28,7 @@ const Header = () => {
     { name: 'Program', href: '/program' },
     { name: 'Jadwal', href: '/jadwal' },
     { name: 'Coach', href: '/coach' },
+    { name: 'Merchandise', href: '/merchandise' },
     { name: 'Membership', href: '/membership' },
     { name: 'Kontak', href: '/kontak' },
   ];
