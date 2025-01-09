@@ -6,11 +6,6 @@ import { Search, Clock, ChevronRight, Tag } from 'lucide-react';
 import axios from 'axios';
 import Link from 'next/link';
 
-interface Author {
-  name: string;
-  avatar: string;
-}
-
 interface BlogPost {
   id: number;
   Category: string;
@@ -30,38 +25,40 @@ interface BlogPost {
   updatedAt: string;
 }
 
-
-
 interface BlogPageComponentProps {
   initialPosts: BlogPost[];
 }
 
+// Updated categories for running school
 const categories = [
   'All',
-  'Trends',
-  'Technology',
-  'Employee Engagement',
-  'HR Management',
-  'Leadership',
-  'Recruitment'
+  'Running Tips',
+  'Training',
+  'Nutrition',
+  'Race Events',
+  'Success Stories',
+  'Equipment'
 ];
 
-
 const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => {
-  if (!post) {
-    return null;
-  }
+  if (!post) return null;
 
   const getCategoryColor = (category: string) => {
     switch (category.trim()) {
-      case 'News':
+      case 'Running Tips':
+        return 'bg-red-500';
+      case 'Training':
         return 'bg-blue-500';
-      case 'Tutorial':
+      case 'Nutrition':
         return 'bg-green-500';
-      case 'Update':
+      case 'Race Events':
         return 'bg-purple-500';
+      case 'Success Stories':
+        return 'bg-yellow-500';
+      case 'Equipment':
+        return 'bg-orange-500';
       default:
-        return 'bg-primary-500';
+        return 'bg-gray-500';
     }
   };
 
@@ -76,7 +73,7 @@ const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => {
     >
       <div className="relative overflow-hidden">
         <img
-          src="/api/placeholder/600/400"
+          src="/images/merchandise/merchan-2.jpg"
           alt={post.Title}
           className="w-full h-48 object-cover transform transition-transform duration-300 group-hover:scale-105"
         />
@@ -90,13 +87,13 @@ const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => {
       <div className="p-6">
         <div className="flex items-center space-x-4 mb-4">
           <img
-            src="/api/placeholder/40/40"
+            src="/images/testimonial/testi-1.jpg"
             alt="Author"
             className="w-10 h-10 rounded-full"
           />
           <div>
             <p className="text-sm font-medium text-gray-900 dark:text-white">
-              Admin
+              Coach
             </p>
             <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
               <span>{new Date(post.Published).toLocaleDateString()}</span>
@@ -131,7 +128,7 @@ const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => {
         
         <Link 
           href={`/blog/${post.Slug}`}
-          className="text-primary-500 font-medium inline-flex items-center hover:text-primary-600 transition-colors"
+          className="text-red-500 font-medium inline-flex items-center hover:text-red-600 transition-colors"
         >
           Read More
           <ChevronRight className="w-4 h-4 ml-1" />
@@ -153,8 +150,6 @@ const BlogPageComponent: React.FC<BlogPageComponentProps> = ({ initialPosts = []
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/blog-posts`
         );
-        console.log('Response:', response.data);
-        // Data sudah dalam format yang benar, tidak perlu .data
         setPosts(response.data.data || []);
       } catch (error) {
         console.error('Error fetching posts:', error);
@@ -165,12 +160,6 @@ const BlogPageComponent: React.FC<BlogPageComponentProps> = ({ initialPosts = []
 
     fetchPosts();
   }, []);
-
-  console.log('Current posts:', posts);
-  console.log('Loading:', loading);
-
-
-  const categories = ['All', 'News', 'Tutorial', 'Update'];
 
   const filteredPosts = posts.filter((post) => {
     if (!post) return false;
@@ -192,20 +181,17 @@ const BlogPageComponent: React.FC<BlogPageComponentProps> = ({ initialPosts = []
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
       </div>
     );
   }
-
-  // Show error state
-
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary-500/20 to-blue-500/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-rose-500/20" />
         </div>
         <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
@@ -214,7 +200,7 @@ const BlogPageComponent: React.FC<BlogPageComponentProps> = ({ initialPosts = []
               animate={{ opacity: 1, y: 0 }}
               className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-6"
             >
-              HR Insights & Updates
+              Running Blog & Tips
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -222,18 +208,17 @@ const BlogPageComponent: React.FC<BlogPageComponentProps> = ({ initialPosts = []
               transition={{ delay: 0.2 }}
               className="text-xl text-gray-600 dark:text-gray-300 mb-8"
             >
-              Stay informed about the latest trends, best practices, and innovations in HR management
+              Temukan tips lari, panduan latihan, dan cerita inspiratif dari komunitas pelari kami
             </motion.p>
             
-            {/* Search Bar */}
             <div className="max-w-2xl mx-auto">
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Search articles..."
+                  placeholder="Cari artikel..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-6 py-4 bg-white dark:bg-gray-800 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:text-white"
+                  className="w-full px-6 py-4 bg-white dark:bg-gray-800 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white"
                 />
                 <Search className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               </div>
@@ -252,7 +237,7 @@ const BlogPageComponent: React.FC<BlogPageComponentProps> = ({ initialPosts = []
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   selectedCategory === category
-                    ? 'bg-primary-500 text-white'
+                    ? 'bg-red-500 text-white'
                     : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                 }`}
               >
@@ -275,7 +260,7 @@ const BlogPageComponent: React.FC<BlogPageComponentProps> = ({ initialPosts = []
           ) : (
             <div className="text-center py-12">
               <p className="text-gray-600 dark:text-gray-300">
-                No posts found matching your criteria.
+                Tidak ada artikel yang sesuai dengan kriteria pencarian.
               </p>
             </div>
           )}
@@ -287,19 +272,19 @@ const BlogPageComponent: React.FC<BlogPageComponentProps> = ({ initialPosts = []
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              Subscribe to Our Newsletter
+              Dapatkan Update Terbaru
             </h2>
             <p className="text-gray-600 dark:text-gray-300 mb-8">
-              Get the latest HR insights and updates delivered straight to your inbox
+              Berlangganan newsletter kami untuk mendapatkan tips lari dan info event terbaru
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <input
                 type="email"
-                placeholder="Enter your email"
-                className="px-6 py-3 bg-gray-50 dark:bg-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:text-white"
+                placeholder="Masukkan email Anda"
+                className="px-6 py-3 bg-gray-50 dark:bg-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white"
               />
-              <button className="px-8 py-3 bg-primary-500 text-white rounded-lg font-medium hover:bg-primary-600 transition-colors">
-                Subscribe
+              <button className="px-8 py-3 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors">
+                Berlangganan
               </button>
             </div>
           </div>

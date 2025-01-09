@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import axios from 'axios';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, Clock, Share2, Tag, Facebook, Twitter, Linkedin } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Share2, Tag, Facebook, Twitter, Instagram } from 'lucide-react';
 
 // Define interfaces
 interface BlogPost {
@@ -27,47 +27,47 @@ interface RelatedPost {
 }
 
 async function getBlogPost(slug: string): Promise<BlogPost | null> {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/blog-posts?filters[Slug][$eq]=${slug}`
-      );
-      return response.data.data[0];
-    } catch (error) {
-      return null;
-    }
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/blog-posts?filters[Slug][$eq]=${slug}`
+    );
+    return response.data.data[0];
+  } catch (error) {
+    return null;
   }
-  
-  async function getRelatedPosts(category: string, currentSlug: string): Promise<RelatedPost[]> {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/blog-posts?filters[Category][$contains]=${category}&filters[Slug][$ne]=${currentSlug}&pagination[limit]=3`
-      );
-      return response.data.data;
-    } catch (error) {
-      return [];
-    }
+}
+
+async function getRelatedPosts(category: string, currentSlug: string): Promise<RelatedPost[]> {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/blog-posts?filters[Category][$contains]=${category}&filters[Slug][$ne]=${currentSlug}&pagination[limit]=3`
+    );
+    return response.data.data;
+  } catch (error) {
+    return [];
   }
-  
-  export default async function BlogDetailPage({
-    params: { slug },
-  }: {
-    params: { slug: string };
-  }) {
-    const post = await getBlogPost(slug);
-  
-    if (!post) {
-      notFound();
-    }
-  
-    const relatedPosts = await getRelatedPosts(post.Category.split(',')[0], slug);
+}
+
+export default async function BlogDetailPage({
+  params: { slug },
+}: {
+  params: { slug: string };
+}) {
+  const post = await getBlogPost(slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  const relatedPosts = await getRelatedPosts(post.Category.split(',')[0], slug);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section with Cover Image */}
       <div className="relative w-full h-[400px] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/20">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/30">
           <img
-            src="/api/placeholder/1920/400"
+            src="/images/merchandise/merchan-2.jpg"
             alt={post.Title}
             className="w-full h-full object-cover"
           />
@@ -78,7 +78,7 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
             <div className="flex items-center justify-center space-x-6">
               <div className="flex items-center">
                 <Calendar className="w-5 h-5 mr-2" />
-                {new Date(post.Published).toLocaleDateString('en-US', {
+                {new Date(post.Published).toLocaleDateString('id-ID', {
                   day: 'numeric',
                   month: 'long',
                   year: 'numeric'
@@ -86,7 +86,7 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
               </div>
               <div className="flex items-center">
                 <Clock className="w-5 h-5 mr-2" />
-                5 min read
+                5 menit baca
               </div>
             </div>
           </div>
@@ -97,10 +97,10 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
       <div className="max-w-4xl mx-auto px-4 py-6">
         <Link 
           href="/blog"
-          className="inline-flex items-center text-primary-500 hover:text-primary-600 transition-colors"
+          className="inline-flex items-center text-red-500 hover:text-red-600 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Blog
+          Kembali ke Blog
         </Link>
       </div>
 
@@ -110,20 +110,20 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
         <div className="flex flex-wrap items-center justify-between py-6 border-y border-gray-200 dark:border-gray-700 mb-8">
           <div className="flex items-center space-x-4">
             <img
-              src="/api/placeholder/40/40"
+              src="/images/testimonial/testi-1.jpg"
               alt="Author"
               className="w-12 h-12 rounded-full"
             />
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">Admin</p>
-              <p className="text-sm text-gray-500">HR Management Expert</p>
+              <p className="font-medium text-gray-900 dark:text-white">Coach Ryan</p>
+              <p className="text-sm text-gray-500">Running Coach & Trainer</p>
             </div>
           </div>
           <div className="flex space-x-4 mt-4 sm:mt-0">
             {post.Category.split(',').map((category) => (
               <span
                 key={category.trim()}
-                className="px-3 py-1 bg-primary-500/10 text-primary-500 rounded-full text-sm flex items-center"
+                className="px-3 py-1 bg-red-500/10 text-red-500 rounded-full text-sm flex items-center"
               >
                 <Tag className="w-4 h-4 mr-1" />
                 {category.trim()}
@@ -142,7 +142,7 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
           <div className="flex items-center justify-between">
             <span className="font-medium text-gray-900 dark:text-white flex items-center">
               <Share2 className="w-5 h-5 mr-2" />
-              Share this article
+              Bagikan artikel ini
             </span>
             <div className="flex space-x-4">
               <button className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors">
@@ -151,8 +151,8 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
               <button className="p-2 rounded-full bg-sky-500 text-white hover:bg-sky-600 transition-colors">
                 <Twitter className="w-5 h-5" />
               </button>
-              <button className="p-2 rounded-full bg-blue-700 text-white hover:bg-blue-800 transition-colors">
-                <Linkedin className="w-5 h-5" />
+              <button className="p-2 rounded-full bg-pink-600 text-white hover:bg-pink-700 transition-colors">
+                <Instagram className="w-5 h-5" />
               </button>
             </div>
           </div>
@@ -162,7 +162,7 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
         {relatedPosts.length > 0 && (
           <div className="border-t border-gray-200 dark:border-gray-700 py-12">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-              Related Articles
+              Artikel Terkait
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {relatedPosts.map((related) => (
@@ -178,11 +178,11 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
                       className="w-full h-48 object-cover"
                     />
                     <div className="p-4">
-                      <h3 className="font-medium text-gray-900 dark:text-white group-hover:text-primary-500 transition-colors">
+                      <h3 className="font-medium text-gray-900 dark:text-white group-hover:text-red-500 transition-colors">
                         {related.Title}
                       </h3>
                       <p className="text-sm text-gray-500 mt-2">
-                        {new Date(related.Published).toLocaleDateString()}
+                        {new Date(related.Published).toLocaleDateString('id-ID')}
                       </p>
                     </div>
                   </div>
@@ -194,22 +194,22 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
       </article>
 
       {/* Newsletter Section */}
-      <section className="bg-primary-500 text-white py-16 mt-12">
+      <section className="bg-red-500 text-white py-16 mt-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h3 className="text-2xl font-bold mb-4">
-            Stay Updated with HR Insights
+            Dapatkan Update Terbaru dari Skolari
           </h3>
           <p className="mb-6">
-            Subscribe to our newsletter for the latest updates and articles
+            Berlangganan newsletter kami untuk mendapatkan tips lari dan info event terbaru
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-xl mx-auto">
             <input
               type="email"
-              placeholder="Enter your email"
+              placeholder="Masukkan email Anda"
               className="px-6 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white text-gray-900 flex-grow"
             />
-            <button className="px-8 py-3 bg-white text-primary-500 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-              Subscribe
+            <button className="px-8 py-3 bg-white text-red-500 rounded-lg font-medium hover:bg-gray-100 transition-colors">
+              Berlangganan
             </button>
           </div>
         </div>
