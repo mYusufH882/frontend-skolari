@@ -67,18 +67,21 @@ const Hero = () => {
   }, []);
 
   const slideVariants = {
-    enter: {
+    enter: (direction: number) => ({
       opacity: 0,
-      scale: 1.1,
-    },
+      scale: direction > 0 ? 1.1 : 0.9,
+      x: direction > 0 ? 100 : -100,
+    }),
     center: {
       opacity: 1,
       scale: 1,
+      x: 0,
     },
-    exit: {
+    exit: (direction: number) => ({
       opacity: 0,
-      scale: 0.9,
-    }
+      scale: direction > 0 ? 0.9 : 1.1,
+      x: direction > 0 ? -100 : 100,
+    })
   };
 
   const paginate = (newDirection: number) => {
@@ -95,16 +98,18 @@ const Hero = () => {
     <div className="relative h-screen overflow-hidden">
       {/* Background Slides Layer */}
       <div className="absolute inset-0 z-0">
-        <AnimatePresence initial={false}>
+        <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={currentSlide}
+            custom={direction}
             variants={slideVariants}
             initial="enter"
             animate="center"
             exit="exit"
             transition={{
               opacity: { duration: 0.8 },
-              scale: { duration: 1 }
+              scale: { duration: 1 },
+              x: { duration: 0.8 }
             }}
             className="relative w-full h-full"
           >
@@ -125,9 +130,10 @@ const Hero = () => {
       <div className="relative z-10 h-full">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div className="flex items-center h-full">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={currentSlide}
+                custom={direction}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}

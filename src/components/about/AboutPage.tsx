@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Target, Users, Code2, Clock, Award, Globe2 } from 'lucide-react';
+import Image from 'next/image';
 
 interface ValueProps {
   icon: React.ElementType;
@@ -69,7 +70,7 @@ const AboutPage = () => {
               transition={{ delay: 0.2 }}
               className="text-xl text-gray-600 dark:text-gray-300"
             >
-              We're on a mission to revolutionize how companies handle their human resources
+              We&apos;re on a mission to revolutionize how companies handle their human resources
               with cutting-edge digital solutions.
             </motion.p>
           </div>
@@ -90,7 +91,7 @@ const AboutPage = () => {
                 Our Story
               </h2>
               <p className="text-gray-600 dark:text-gray-300">
-                Founded with a vision to simplify HR processes, we've grown from a small team
+                Founded with a vision to simplify HR processes, we&apos;ve grown from a small team
                 of passionate innovators to a leading provider of HR management solutions.
               </p>
               <p className="text-gray-600 dark:text-gray-300">
@@ -107,7 +108,7 @@ const AboutPage = () => {
             >
               <div className="aspect-square rounded-2xl bg-gradient-to-r from-primary-500 to-blue-500 p-1">
                 <div className="w-full h-full rounded-2xl bg-white dark:bg-gray-800 p-6">
-                  <img
+                  <Image
                     src="/api/placeholder/600/600"
                     alt="Team collaboration"
                     className="w-full h-full object-cover rounded-xl"

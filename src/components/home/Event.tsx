@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, Clock } from 'lucide-react';
+import Image from 'next/image';
 
 interface Event {
   id: number;
@@ -54,7 +55,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
       className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
     >
       <div className="relative h-48">
-        <img
+        <Image
           src={event.image}
           alt={event.title}
           className="w-full h-full object-cover"

@@ -1,5 +1,27 @@
 import axios from 'axios';
 
+// Definisikan interfaces
+interface ContactFormData {
+  name: string;
+  email: string;
+  phone?: string;
+  message: string;
+  subject?: string;
+}
+
+// Optional: Definisikan interfaces untuk respons data jika diperlukan
+interface StrapiResponse<T> {
+  data: T;
+  meta?: {
+    pagination?: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
 const strapiAPI = axios.create({
   baseURL: process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337',
   headers: {
@@ -57,9 +79,9 @@ export const getTestimonials = async () => {
   }
 };
 
-export const submitContactForm = async (formData: any) => {
+export const submitContactForm = async (formData: ContactFormData) => {
   try {
-    const response = await strapiAPI.post('/api/contact-submissions', {
+    const response = await strapiAPI.post<StrapiResponse<ContactFormData>>('/api/contact-submissions', {
       data: formData
     });
     return response.data;

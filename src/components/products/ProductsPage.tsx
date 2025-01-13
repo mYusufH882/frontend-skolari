@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Users, FileText, BarChart2, Clock, Shield, Brain,
+  Users, FileText, BarChart2,
   CheckCircle, ChevronRight, ArrowRight
 } from 'lucide-react';
 
@@ -204,7 +204,7 @@ const ProductsPage = () => {
               Compare Plans
             </h2>
             <p className="text-gray-600 dark:text-gray-300">
-              Choose the perfect plan for your organization's needs
+              Choose the perfect plan for your organization&apos;s needs
             </p>
           </div>
           <ProductComparison />

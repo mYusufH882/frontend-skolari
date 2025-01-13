@@ -4,6 +4,14 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
+interface Benefit {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  highlight: boolean;
+}
+
 const benefits = [
   {
     id: 1,
@@ -63,7 +71,7 @@ const GymBenefits = () => {
     return null;
   }
 
-  const handleBenefitClick = (benefit: any) => {
+  const handleBenefitClick = (benefit: Benefit) => {
     if (!isAnimating && benefit.id !== selectedBenefit.id) {
       setIsAnimating(true);
       setSelectedBenefit(benefit);

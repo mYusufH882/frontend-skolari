@@ -12,6 +12,7 @@ import {
   Clock,
   CreditCard
 } from 'lucide-react';
+import Image from 'next/image';
 
 // Types
 interface Product {
@@ -76,7 +77,7 @@ const HeroSection = () => {
   return (
     <div className="relative h-[600px] bg-gradient-to-r from-gray-900 to-black dark:from-black dark:to-gray-900">
       <div className="absolute inset-0 bg-black/50">
-        <img 
+        <Image 
           src="/images/merchandise/m-hero-2.jpg" 
           alt="Hero background" 
           className="w-full h-full object-cover opacity-50"
@@ -198,7 +199,7 @@ const FeaturedCollections = () => {
             >
               <div className="relative h-[400px] overflow-hidden rounded-xl">
                 <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-                  <img
+                  <Image
                     src={collection.image}
                     alt={collection.name}
                     className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-500"
@@ -246,7 +247,7 @@ const BestSellers = () => {
               className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg"
             >
               <div className="relative">
-                <img
+                <Image
                   src={product.image}
                   alt={product.name}
                   className="w-full h-64 object-cover"

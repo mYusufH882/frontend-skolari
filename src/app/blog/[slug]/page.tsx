@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import axios from 'axios';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, Clock, Share2, Tag, Facebook, Twitter, Instagram } from 'lucide-react';
+import Image from 'next/image';
 
 // Define interfaces
 interface BlogPost {
@@ -32,7 +33,7 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/blog-posts?filters[Slug][$eq]=${slug}`
     );
     return response.data.data[0];
-  } catch (error) {
+  } catch {  // Hapus parameter error
     return null;
   }
 }
@@ -43,7 +44,7 @@ async function getRelatedPosts(category: string, currentSlug: string): Promise<R
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/blog-posts?filters[Category][$contains]=${category}&filters[Slug][$ne]=${currentSlug}&pagination[limit]=3`
     );
     return response.data.data;
-  } catch (error) {
+  } catch {  // Hapus parameter error
     return [];
   }
 }
@@ -66,7 +67,7 @@ export default async function BlogDetailPage({
       {/* Hero Section with Cover Image */}
       <div className="relative w-full h-[400px] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/30">
-          <img
+          <Image
             src="/images/merchandise/merchan-2.jpg"
             alt={post.Title}
             className="w-full h-full object-cover"
@@ -109,7 +110,7 @@ export default async function BlogDetailPage({
         {/* Author and Categories */}
         <div className="flex flex-wrap items-center justify-between py-6 border-y border-gray-200 dark:border-gray-700 mb-8">
           <div className="flex items-center space-x-4">
-            <img
+            <Image
               src="/images/testimonial/testi-1.jpg"
               alt="Author"
               className="w-12 h-12 rounded-full"
@@ -172,7 +173,7 @@ export default async function BlogDetailPage({
                   className="group"
                 >
                   <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-                    <img
+                    <Image
                       src="/api/placeholder/400/200"
                       alt={related.Title}
                       className="w-full h-48 object-cover"

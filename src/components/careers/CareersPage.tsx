@@ -4,13 +4,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Search, 
-  MapPin, 
-  Briefcase, 
+  MapPin,
   Clock, 
   ChevronRight,
-  Code,
-  PieChart,
-  Users,
   HeartHandshake,
   GraduationCap,
   Wallet

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Search, Clock, ChevronRight, Tag } from 'lucide-react';
 import axios from 'axios';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Category {
   id: number;
@@ -38,7 +39,7 @@ interface BlogPost {
 }
 
 interface BlogPageComponentProps {
-  initialPosts: any[];
+  initialPosts: BlogPost[];
 }
 
 const getCategoryColor = (categoryTitle: string): string => {
@@ -63,7 +64,7 @@ const getCategoryColor = (categoryTitle: string): string => {
 const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => {
   if (!post) return null;
 
-  const getImageUrl = (image: any) => {
+  const getImageUrl = (image: {url: string} | null) => {
     if (!image) return "/images/merchandise/merchan-2.jpg";
     return `${process.env.NEXT_PUBLIC_STRAPI_URL}${image.url}`;
   };
@@ -81,7 +82,7 @@ const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => {
       className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all"
     >
       <div className="relative overflow-hidden">
-        <img
+        <Image
           src={getImageUrl(post.CoverImage)}
           alt={post.Title}
           className="w-full h-48 object-cover transform transition-transform duration-300 group-hover:scale-105"
@@ -95,7 +96,7 @@ const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => {
       
       <div className="p-6">
         <div className="flex items-center space-x-4 mb-4">
-          <img
+          <Image
             src="/images/testimonial/testi-1.jpg"
             alt="Author"
             className="w-10 h-10 rounded-full"
