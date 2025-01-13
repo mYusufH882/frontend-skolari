@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function BlogDetailPage({ params, searchParams }: PageProps) {
+export default async function BlogDetailPage({ params }: PageProps) {
   const post = await getBlogPost(params.slug);
 
   if (!post) {
