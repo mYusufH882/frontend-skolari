@@ -3,8 +3,8 @@ import axios from 'axios';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, Clock, Share2, Tag, Facebook, Twitter, Instagram } from 'lucide-react';
 import Image from 'next/image';
+import { Metadata } from 'next';
 
-// Define interfaces
 interface BlogPost {
   id: number;
   Title: string;
@@ -27,13 +27,20 @@ interface RelatedPost {
   Category: string;
 }
 
+interface PageProps {
+  params: {
+    slug: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
 async function getBlogPost(slug: string): Promise<BlogPost | null> {
   try {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/blog-posts?filters[Slug][$eq]=${slug}`
     );
     return response.data.data[0];
-  } catch {  // Hapus parameter error
+  } catch {
     return null;
   }
 }
@@ -44,23 +51,35 @@ async function getRelatedPosts(category: string, currentSlug: string): Promise<R
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/blog-posts?filters[Category][$contains]=${category}&filters[Slug][$ne]=${currentSlug}&pagination[limit]=3`
     );
     return response.data.data;
-  } catch {  // Hapus parameter error
+  } catch {
     return [];
   }
 }
 
-export default async function BlogDetailPage({
-  params: { slug },
-}: {
-  params: { slug: string };
-}) {
-  const post = await getBlogPost(slug);
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const post = await getBlogPost(params.slug);
+
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+      description: 'The blog post you are looking for does not exist.',
+    };
+  }
+
+  return {
+    title: post.Title,
+    description: post.Excerpt,
+  };
+}
+
+export default async function BlogDetailPage({ params, searchParams }: PageProps) {
+  const post = await getBlogPost(params.slug);
 
   if (!post) {
     notFound();
   }
 
-  const relatedPosts = await getRelatedPosts(post.Category.split(',')[0], slug);
+  const relatedPosts = await getRelatedPosts(post.Category.split(',')[0], params.slug);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -70,6 +89,8 @@ export default async function BlogDetailPage({
           <Image
             src="/images/merchandise/merchan-2.jpg"
             alt={post.Title}
+            width={1920}
+            height={400}
             className="w-full h-full object-cover"
           />
         </div>
@@ -113,7 +134,9 @@ export default async function BlogDetailPage({
             <Image
               src="/images/testimonial/testi-1.jpg"
               alt="Author"
-              className="w-12 h-12 rounded-full"
+              width={48}
+              height={48}
+              className="rounded-full"
             />
             <div>
               <p className="font-medium text-gray-900 dark:text-white">Coach Ryan</p>
@@ -176,6 +199,8 @@ export default async function BlogDetailPage({
                     <Image
                       src="/api/placeholder/400/200"
                       alt={related.Title}
+                      width={400}
+                      height={200}
                       className="w-full h-48 object-cover"
                     />
                     <div className="p-4">
