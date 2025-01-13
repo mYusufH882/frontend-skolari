@@ -27,10 +27,12 @@ interface RelatedPost {
   Category: string;
 }
 
-interface Props {
-  params: { slug: string },
-  searchParams: Record<string, string | string[] | undefined>
-}
+// Sesuai dengan tipe Next.js PageProps
+type PageProps = {
+  params: {
+    slug: string;
+  };
+};
 
 async function getBlogPost(slug: string): Promise<BlogPost | null> {
   try {
@@ -54,23 +56,30 @@ async function getRelatedPosts(category: string, currentSlug: string): Promise<R
   }
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const post = await getBlogPost(params.slug);
 
   if (!post) {
     return {
-      title: 'Post Not Found',
+      title: 'Post Not Found - Skolari Running School',
       description: 'The blog post you are looking for does not exist.',
     };
   }
 
   return {
-    title: post.Title,
+    title: `${post.Title} - Skolari Running School`,
     description: post.Excerpt,
+    openGraph: {
+      title: post.Title,
+      description: post.Excerpt,
+      type: 'article',
+      publishedTime: post.Published,
+      authors: ['Skolari Running School'],
+    },
   };
 }
 
-export default async function BlogDetailPage({ params }: Props) {
+export default async function BlogDetailPage({ params }: PageProps) {
   const post = await getBlogPost(params.slug);
 
   if (!post) {
@@ -90,6 +99,7 @@ export default async function BlogDetailPage({ params }: Props) {
             width={1920}
             height={400}
             className="w-full h-full object-cover"
+            priority
           />
         </div>
         <div className="absolute inset-0 flex items-center justify-center">
