@@ -27,8 +27,9 @@ interface RelatedPost {
   Category: string;
 }
 
-type Props = {
-  params: { slug: string }
+interface Props {
+  params: { slug: string },
+  searchParams: Record<string, string | string[] | undefined>
 }
 
 async function getBlogPost(slug: string): Promise<BlogPost | null> {

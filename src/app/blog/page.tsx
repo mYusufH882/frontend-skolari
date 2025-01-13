@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 
 export default async function BlogPage() {
   try {
-    // Fetch blog posts at build time
     const response = await getBlogPosts();
     
     if (!response || !response.data) {
@@ -20,7 +19,6 @@ export default async function BlogPage() {
     return <BlogPageComponent initialPosts={response.data} />;
   } catch (error) {
     console.error('Error saat mengambil data blog:', error);
-    // Return component with empty posts if there's an error
     return <BlogPageComponent initialPosts={[]} />;
   }
 }
