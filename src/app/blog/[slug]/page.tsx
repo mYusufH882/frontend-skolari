@@ -27,11 +27,8 @@ interface RelatedPost {
   Category: string;
 }
 
-interface PageProps {
-  params: {
-    slug: string;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
+type Props = {
+  params: { slug: string }
 }
 
 async function getBlogPost(slug: string): Promise<BlogPost | null> {
@@ -56,7 +53,7 @@ async function getRelatedPosts(category: string, currentSlug: string): Promise<R
   }
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getBlogPost(params.slug);
 
   if (!post) {
@@ -72,7 +69,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function BlogDetailPage({ params }: PageProps) {
+export default async function BlogDetailPage({ params }: Props) {
   const post = await getBlogPost(params.slug);
 
   if (!post) {
