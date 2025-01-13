@@ -30,6 +30,7 @@ const Header = () => {
     { name: 'Coach', href: '/coach' },
     { name: 'Merchandise', href: '/merchandise' },
     { name: 'Membership', href: '/membership' },
+    // { name: 'Plan Package', href: '/package_plan' },
     { name: 'Blog', href: '/blog' },
     { name: 'Kontak', href: '/kontak' },
   ];

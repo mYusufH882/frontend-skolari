@@ -103,7 +103,7 @@ const GymBenefits = () => {
                 onClick={() => handleBenefitClick(benefit)}
                 className={`p-4 rounded-lg border ${
                   benefit.id === selectedBenefit.id 
-                    ? 'border-blue-500 bg-blue-600 text-white' 
+                    ? 'border-red-500 bg-red-600 text-white' 
                     : 'border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800/50'
                 } 
                 transition-all duration-300 cursor-pointer`}

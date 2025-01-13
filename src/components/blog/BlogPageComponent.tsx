@@ -6,14 +6,26 @@ import { Search, Clock, ChevronRight, Tag } from 'lucide-react';
 import axios from 'axios';
 import Link from 'next/link';
 
+interface Category {
+  id: number;
+  documentId: string;
+  judul: string;
+  slug_category: string;
+  color?: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
 interface BlogPost {
   id: number;
-  Category: string;
+  category: Category;
   Content: string;
   CoverImage: {
     id: number;
     documentId: string;
     name: string;
+    url: string;
   };
   Excerpt: string;
   Published: string;
@@ -26,41 +38,38 @@ interface BlogPost {
 }
 
 interface BlogPageComponentProps {
-  initialPosts: BlogPost[];
+  initialPosts: any[];
 }
 
-// Updated categories for running school
-const categories = [
-  'All',
-  'Running Tips',
-  'Training',
-  'Nutrition',
-  'Race Events',
-  'Success Stories',
-  'Equipment'
-];
+const getCategoryColor = (categoryTitle: string): string => {
+  switch (categoryTitle?.trim()) {
+    case 'Running Tips':
+      return 'bg-red-500';
+    case 'Training':
+      return 'bg-blue-500';
+    case 'Nutrition':
+      return 'bg-green-500';
+    case 'Race Events':
+      return 'bg-purple-500';
+    case 'Success Stories':
+      return 'bg-yellow-500';
+    case 'Equipment':
+      return 'bg-orange-500';
+    default:
+      return 'bg-gray-500';
+  }
+};
 
 const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => {
   if (!post) return null;
 
-  const getCategoryColor = (category: string) => {
-    switch (category.trim()) {
-      case 'Running Tips':
-        return 'bg-red-500';
-      case 'Training':
-        return 'bg-blue-500';
-      case 'Nutrition':
-        return 'bg-green-500';
-      case 'Race Events':
-        return 'bg-purple-500';
-      case 'Success Stories':
-        return 'bg-yellow-500';
-      case 'Equipment':
-        return 'bg-orange-500';
-      default:
-        return 'bg-gray-500';
-    }
+  const getImageUrl = (image: any) => {
+    if (!image) return "/images/merchandise/merchan-2.jpg";
+    return `${process.env.NEXT_PUBLIC_STRAPI_URL}${image.url}`;
   };
+
+  const categoryTitle = post.category?.judul || 'Uncategorized';
+  const categoryColor = getCategoryColor(categoryTitle);
 
   return (
     <motion.article
@@ -73,13 +82,13 @@ const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => {
     >
       <div className="relative overflow-hidden">
         <img
-          src="/images/merchandise/merchan-2.jpg"
+          src={getImageUrl(post.CoverImage)}
           alt={post.Title}
           className="w-full h-48 object-cover transform transition-transform duration-300 group-hover:scale-105"
         />
         <div className="absolute top-4 left-4">
-          <span className={`px-3 py-1 ${getCategoryColor(post.Category.split(',')[0])} text-white text-sm font-medium rounded-full`}>
-            {post.Category.split(',')[0].trim()}
+          <span className={`px-3 py-1 ${categoryColor} text-white text-sm font-medium rounded-full`}>
+            {categoryTitle}
           </span>
         </div>
       </div>
@@ -115,15 +124,10 @@ const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => {
         </p>
         
         <div className="flex flex-wrap gap-2 mb-4">
-          {post.Category.split(',').map((category) => (
-            <span
-              key={category.trim()}
-              className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-sm text-gray-600 dark:text-gray-300 rounded-full flex items-center"
-            >
-              <Tag className="w-3 h-3 mr-1" />
-              {category.trim()}
-            </span>
-          ))}
+          <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-sm text-gray-600 dark:text-gray-300 rounded-full flex items-center">
+            <Tag className="w-3 h-3 mr-1" />
+            {categoryTitle}
+          </span>
         </div>
         
         <Link 
@@ -140,25 +144,32 @@ const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => {
 
 const BlogPageComponent: React.FC<BlogPageComponentProps> = ({ initialPosts = [] }) => {
   const [posts, setPosts] = useState<BlogPost[]>(initialPosts);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/blog-posts`
-        );
-        setPosts(response.data.data || []);
+        const [postsResponse, categoriesResponse] = await Promise.all([
+          axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/blog-posts?populate=*`),
+          axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/categories`)
+        ]);
+
+        console.log('Fetched posts:', postsResponse.data);
+        console.log('Fetched categories:', categoriesResponse.data);
+
+        setPosts(postsResponse.data.data || []);
+        setCategories(categoriesResponse.data.data || []);
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPosts();
+    fetchData();
   }, []);
 
   const filteredPosts = posts.filter((post) => {
@@ -171,9 +182,7 @@ const BlogPageComponent: React.FC<BlogPageComponentProps> = ({ initialPosts = []
     
     const matchesCategory =
       selectedCategory === 'All' || 
-      post.Category.split(',').some(cat => 
-        cat.trim() === selectedCategory
-      );
+      post.category?.judul === selectedCategory;
 
     return matchesSearch && matchesCategory;
   });
@@ -231,17 +240,28 @@ const BlogPageComponent: React.FC<BlogPageComponentProps> = ({ initialPosts = []
       <section className="py-8">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap justify-center gap-4">
+            <button
+              key="all"
+              onClick={() => setSelectedCategory('All')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                selectedCategory === 'All'
+                  ? 'bg-red-500 text-white'
+                  : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+            >
+              All
+            </button>
             {categories.map((category) => (
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
+                key={category.id}
+                onClick={() => setSelectedCategory(category.judul)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  selectedCategory === category
+                  selectedCategory === category.judul
                     ? 'bg-red-500 text-white'
                     : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                 }`}
               >
-                {category}
+                {category.judul}
               </button>
             ))}
           </div>
