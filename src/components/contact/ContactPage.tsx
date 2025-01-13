@@ -7,10 +7,7 @@ import {
   Phone, 
   MapPin, 
   MessageCircle, 
-  Send,
-  Building,
-  Users,
-  HelpCircle
+  Send
 } from 'lucide-react';
 
 interface ContactMethod {

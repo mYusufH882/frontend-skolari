@@ -200,7 +200,7 @@ const BlogPageComponent: React.FC<BlogPageComponentProps> = ({ initialPosts = []
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-rose-500/20" />
+          <div className="absolute inset-0 bg-gradient-to-r bg-gray-800 bg-gray-800" />
         </div>
         <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
@@ -227,7 +227,7 @@ const BlogPageComponent: React.FC<BlogPageComponentProps> = ({ initialPosts = []
                   placeholder="Cari artikel..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-6 py-4 bg-white dark:bg-gray-800 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white"
+                  className="w-full px-6 py-4 bg-white dark:bg-gray-900 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white"
                 />
                 <Search className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               </div>

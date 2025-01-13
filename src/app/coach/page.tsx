@@ -158,7 +158,7 @@ const CoachPage = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       {/* Hero Section */}
       <div className="relative py-20 bg-gray-900 overflow-hidden">
-        <div className="absolute inset-0 bg-[#EE1C25]/10" />
+        <div className="absolute inset-0 bg-gray-800" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="max-w-3xl mx-auto text-center">
             <motion.h1
